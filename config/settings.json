@@ -1,0 +1,7 @@
+{
+  "project_name": "NetSecOps Laboratory",
+  "allowed_network": "192.168.56.0/24",
+  "ports": [21, 22, 23, 80, 443, 445, 3389],
+  "high_risk_ports": [21, 23, 445],
+  "report_retention_note": "Bu proje yalnızca simüle edilmiş laboratuvar verileriyle çalışır."
+}
