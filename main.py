@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import sys
 from collections.abc import Callable
 
 from modules.app_logging import configure_logging
@@ -11,6 +12,14 @@ from modules.discovery import discover_simulated_assets
 from modules.local_socket_lab import run_local_socket_demo
 from modules.port_scan import assess_simulated_ports
 from modules.workflow import run_full_audit
+
+
+def configure_console_encoding() -> None:
+    """Windows terminallerinde Türkçe çıktının UTF-8 yazılmasını güvenceye alır."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="replace")
 
 
 def execute_safely(action: Callable[[], None]) -> bool:
@@ -118,6 +127,7 @@ def parse_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    configure_console_encoding()
     args = parse_args()
     actions = {
         "menu": main,
