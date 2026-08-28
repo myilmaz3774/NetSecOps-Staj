@@ -7,21 +7,30 @@ from pathlib import Path
 from modules.storage import PROJECT_ROOT, ensure_directory, timestamp
 
 
-SAMPLE_CONFIGS = {
-    "baseline": """hostname lab-switch-01\n!\ninterface GigabitEthernet0/1\n switchport mode access\n switchport access vlan 10\n!\nip access-list extended MANAGEMENT_ONLY\n permit tcp 192.168.56.0 0.0.0.255 any eq 22\n deny ip any any log\n!\nend\n""",
-    "changed": """hostname lab-switch-01\n!\ninterface GigabitEthernet0/1\n switchport mode access\n switchport access vlan 20\n!\nip access-list extended MANAGEMENT_ONLY\n permit tcp 192.168.56.0 0.0.0.255 any eq 22\n permit ip any any\n!\nend\n""",
-}
+SAMPLE_CONFIG_DIR = PROJECT_ROOT / "fixtures/configs"
+
+
+def save_backup(content: str, version: str, output_directory: Path) -> Path:
+    """Verilen yapılandırmayı zaman damgalı bir yedek dosyasına kaydeder."""
+    if not content.strip():
+        raise ValueError("Boş yapılandırma yedeklenemez.")
+    if version not in {"baseline", "changed"}:
+        raise ValueError("Geçersiz yapılandırma sürümü.")
+    output_directory.mkdir(parents=True, exist_ok=True)
+    path = output_directory / f"{timestamp()}_{version}.txt"
+    path.write_text(content, encoding="utf-8")
+    return path
 
 
 def create_simulated_backup(version: str) -> Path:
     """İki kontrollü örnek yapılandırma sürümünden birini yedekler."""
-    if version not in SAMPLE_CONFIGS:
+    if version not in {"baseline", "changed"}:
         raise ValueError("Geçersiz yapılandırma sürümü.")
 
+    source = SAMPLE_CONFIG_DIR / f"{version}.txt"
+    content = source.read_text(encoding="utf-8")
     directory = ensure_directory("data/backups/lab-switch-01")
-    path = directory / f"{timestamp()}_{version}.txt"
-    path.write_text(SAMPLE_CONFIGS[version], encoding="utf-8")
-    return path
+    return save_backup(content, version, directory)
 
 
 def list_backups() -> list[Path]:

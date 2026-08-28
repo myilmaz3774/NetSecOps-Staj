@@ -1,6 +1,8 @@
 """NetSecOps laboratuvar otomasyonunun komut satırı arayüzü."""
 
 import argparse
+import json
+from collections.abc import Callable
 
 from modules.app_logging import configure_logging
 from modules.config_backup import create_simulated_backup
@@ -9,6 +11,18 @@ from modules.discovery import discover_simulated_assets
 from modules.local_socket_lab import run_local_socket_demo
 from modules.port_scan import assess_simulated_ports
 from modules.workflow import run_full_audit
+
+
+def execute_safely(action: Callable[[], None]) -> bool:
+    """Beklenen kullanıcı ve dosya hatalarını anlaşılır biçimde raporlar."""
+    try:
+        action()
+        return True
+    except (FileNotFoundError, json.JSONDecodeError, ValueError, OSError) as error:
+        logger = configure_logging()
+        logger.error("İşlem tamamlanamadı: %s", error)
+        print(f"\nHATA: İşlem tamamlanamadı: {error}")
+        return False
 
 
 def print_assets() -> None:
@@ -76,15 +90,15 @@ def main() -> None:
         print("0 - Çıkış")
         choice = input("Seçiminiz: ").strip()
         if choice == "1":
-            print_assets()
+            execute_safely(print_assets)
         elif choice == "2":
-            print_port_report()
+            execute_safely(print_port_report)
         elif choice == "3":
-            create_and_compare_backups()
+            execute_safely(create_and_compare_backups)
         elif choice == "4":
-            print_full_audit()
+            execute_safely(print_full_audit)
         elif choice == "5":
-            print_local_socket_report()
+            execute_safely(print_local_socket_report)
         elif choice == "0":
             print("Uygulama kapatıldı.")
             break
@@ -113,4 +127,4 @@ if __name__ == "__main__":
         "local": print_local_socket_report,
         "all": print_full_audit,
     }
-    actions[args.run]()
+    execute_safely(actions[args.run])

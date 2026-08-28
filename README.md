@@ -42,6 +42,7 @@ python -m unittest discover -s tests -v
 ## Dosya açıklamaları
 
 - `config/`: Uygulama ayarları ve simüle edilmiş cihaz verileri
+- `fixtures/`: Karşılaştırma için kontrollü laboratuvar config örnekleri
 - `modules/`: Uygulamanın işlevsel modülleri
 - `data/inventory/`: Oluşturulan envanter kayıtları
 - `data/backups/`: Örnek yapılandırma yedekleri
@@ -49,6 +50,8 @@ python -m unittest discover -s tests -v
 - `logs/`: Boyut kontrollü uygulama günlükleri
 - `tests/`: Otomatik birim ve güvenlik sınırı testleri
 - `docs/`: Teknik mimari ve test senaryoları
+
+Her `main` dalı güncellemesinde GitHub Actions, otomatik testleri farklı Python sürümlerinde çalıştırır ve tam denetim için smoke test uygular.
 
 ## Staj raporu için not
 

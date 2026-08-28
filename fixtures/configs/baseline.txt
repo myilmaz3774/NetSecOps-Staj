@@ -1,0 +1,11 @@
+hostname lab-switch-01
+!
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+!
+ip access-list extended MANAGEMENT_ONLY
+ permit tcp 192.168.56.0 0.0.0.255 any eq 22
+ deny ip any any log
+!
+end

@@ -40,3 +40,5 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 - `workflow.py`: Bütün modülleri tek bir denetim akışında birleştirir.
 - `validation.py`: Girdi şeması ve izinli ağ sınırı kontrollerini uygular.
 - `app_logging.py`: Uygulama günlüklerini boyut kontrollü şekilde saklar.
+
+Örnek switch yapılandırmaları `fixtures/configs` altında kaynak veri olarak tutulur. Üretilen zaman damgalı kopyalar Git'e eklenmeyen `data/backups` klasörüne yazılır.
