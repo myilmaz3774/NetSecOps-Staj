@@ -12,6 +12,7 @@ Kullanıcı / CLI
       |
       +--> Varlık keşfi ------> Envanter JSON
       +--> Port denetimi -----> Risk raporu JSON
+      +--> Loopback TCP lab --> Gerçek Socket bağlantı testi
       +--> Config yedekleme --> Zaman damgalı yedekler
       +--> Diff analizi ------> Değişiklik raporu
       |
@@ -22,6 +23,7 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 ## Güvenlik kontrolleri
 
 - Çalışma modu yalnızca simüle edilmiş cihaz kayıtlarını kullanır.
+- Gerçek Socket bağlantı testi yalnızca `127.0.0.1` loopback adresini kabul eder.
 - Her IP adresi `allowed_network` CIDR sınırı içinde doğrulanır.
 - IP, MAC, hostname ve port alanları çalıştırma öncesinde kontrol edilir.
 - Gerçek cihaz bilgileri için ayrılan `config/devices.json` Git tarafından dışlanır.
@@ -32,6 +34,7 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 
 - `discovery.py`: Örnek cihazları doğrular ve envanter kaydı üretir.
 - `port_scan.py`: İzlenen portları risk seviyelerine ayırır.
+- `local_socket_lab.py`: Geçici loopback servisiyle gerçek TCP bağlantı testini gösterir.
 - `config_backup.py`: Kontrollü iki config sürümünü zaman damgalı olarak yedekler.
 - `diff_check.py`: Eklenen ve silinen satırları karşılaştırır; kritik değişiklikleri belirler.
 - `workflow.py`: Bütün modülleri tek bir denetim akışında birleştirir.

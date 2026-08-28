@@ -6,6 +6,7 @@ from modules.app_logging import configure_logging
 from modules.config_backup import create_simulated_backup
 from modules.diff_check import compare_configs
 from modules.discovery import discover_simulated_assets
+from modules.local_socket_lab import run_local_socket_demo
 from modules.port_scan import assess_simulated_ports
 from modules.workflow import run_full_audit
 
@@ -50,8 +51,17 @@ def print_full_audit() -> None:
     print(f"- Açık port sayısı: {summary['open_port_count']}")
     print(f"- Yüksek riskli port bulgusu: {summary['high_risk_count']}")
     print(f"- Kritik config değişikliği: {summary['critical_config_change_count']}")
+    print(f"- Loopback açık TCP portu: {summary['local_socket_open_count']}")
     print(f"- JSON raporu: {result['json_report']}")
     print(f"- Metin raporu: {result['text_report']}")
+
+
+def print_local_socket_report() -> None:
+    results, report = run_local_socket_demo()
+    print("\nYerel TCP laboratuvar sonucu:")
+    for result in results:
+        print(f"- 127.0.0.1:{result['port']} -> {result['status']}")
+    print(f"Rapor kaydedildi: {report}")
 
 
 def main() -> None:
@@ -62,6 +72,7 @@ def main() -> None:
         print("2 - Simüle edilmiş port ve risk denetimi")
         print("3 - Simüle edilmiş config yedekleme ve diff")
         print("4 - Tam laboratuvar denetimi")
+        print("5 - Yerel TCP soket laboratuvarı")
         print("0 - Çıkış")
         choice = input("Seçiminiz: ").strip()
         if choice == "1":
@@ -72,6 +83,8 @@ def main() -> None:
             create_and_compare_backups()
         elif choice == "4":
             print_full_audit()
+        elif choice == "5":
+            print_local_socket_report()
         elif choice == "0":
             print("Uygulama kapatıldı.")
             break
@@ -83,7 +96,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="NetSecOps simülasyon laboratuvarı")
     parser.add_argument(
         "--run",
-        choices=("menu", "discovery", "ports", "config", "all"),
+        choices=("menu", "discovery", "ports", "config", "local", "all"),
         default="menu",
         help="Çalıştırılacak laboratuvar işlemi",
     )
@@ -97,6 +110,7 @@ if __name__ == "__main__":
         "discovery": print_assets,
         "ports": print_port_report,
         "config": create_and_compare_backups,
+        "local": print_local_socket_report,
         "all": print_full_audit,
     }
     actions[args.run]()

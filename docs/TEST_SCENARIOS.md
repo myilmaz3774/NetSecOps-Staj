@@ -12,6 +12,8 @@
 | CIDR dışındaki simüle IP | Veri doğrulaması işlemi durdurur |
 | Hatalı MAC adresi | Veri doğrulaması işlemi durdurur |
 | Birleşik denetim özeti | Cihaz, port, risk ve alarm sayıları doğru hesaplanır |
+| Geçici loopback TCP servisi | Açık port olarak algılanır |
+| Loopback dışı TCP hedefi | Güvenlik sınırı nedeniyle reddedilir |
 
 Test komutu:
 
@@ -22,9 +24,10 @@ python -m unittest discover -s tests -v
 ## Manuel kabul testi
 
 1. `python main.py --run all` komutu çalıştırılır.
-2. Konsolda üç cihaz ve altı açık port raporlandığı görülür.
+2. Konsolda üç cihaz ve altı simüle açık port raporlandığı görülür.
 3. İki yüksek riskli port bulgusunun bulunduğu doğrulanır.
 4. VLAN 10'dan VLAN 20'ye geçiş diff çıktısında kontrol edilir.
 5. Güvenli `deny` kuralının kaldırılması ve geniş `permit` kuralının eklenmesi için iki kritik uyarı doğrulanır.
 6. `data/reports` altında JSON ve metin özetlerinin oluştuğu kontrol edilir.
 7. `logs/app.log` içinde denetimin başlangıç ve bitiş kayıtları doğrulanır.
+8. Loopback Socket laboratuvarında bir açık ve bir kapalı port görüldüğü doğrulanır.

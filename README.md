@@ -9,10 +9,11 @@ Bu proje, staj kapsamında ağ varlık envanteri, port/risk denetimi ve yapılan
 - Zaman damgalı örnek yapılandırma yedekleri
 - Satır bazlı yapılandırma fark analizi ve kritik değişiklik uyarısı
 - JSON tabanlı envanter ve rapor çıktıları
+- Yalnızca loopback üzerinde çalışan gerçek TCP Socket laboratuvarı
 
 ## Güvenlik sınırı
 
-Uygulama yalnızca `config/simulated_network.json` içindeki örnek laboratuvar verileriyle çalışır. Gerçek kurum ağına bağlantı, gerçek IP taraması veya gerçek cihazlara SSH erişimi içermez.
+Uygulama yalnızca `config/simulated_network.json` içindeki örnek laboratuvar verileriyle çalışır. Socket deneyi yalnızca `127.0.0.1` loopback adresinde geçici bir test servisi açar ve kod başka hedefleri reddeder. Gerçek kurum ağına bağlantı, gerçek IP taraması veya gerçek cihazlara SSH erişimi içermez.
 
 ## Çalıştırma
 
@@ -30,7 +31,7 @@ Tüm denetimleri tek komutla çalıştırmak için:
 python main.py --run all
 ```
 
-Diğer otomasyon seçenekleri `discovery`, `ports` ve `config` değerleridir.
+Diğer otomasyon seçenekleri `discovery`, `ports`, `config` ve `local` değerleridir.
 
 ## Testler
 

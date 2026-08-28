@@ -9,18 +9,25 @@ from modules.app_logging import configure_logging
 from modules.config_backup import create_simulated_backup
 from modules.diff_check import compare_configs
 from modules.discovery import discover_simulated_assets
+from modules.local_socket_lab import run_local_socket_demo
 from modules.notifier import format_alerts
 from modules.port_scan import assess_simulated_ports
 from modules.storage import ensure_directory, save_json, timestamp
 
 
-def build_summary(assets: list[dict], port_results: list[dict], config_alerts: list[str]) -> dict:
+def build_summary(
+    assets: list[dict],
+    port_results: list[dict],
+    config_alerts: list[str],
+    local_socket_results: list[dict] | None = None,
+) -> dict:
     """Denetim çıktılarını yönetici özeti için sayısallaştırır."""
     levels = Counter(
         finding["level"]
         for result in port_results
         for finding in result["findings"]
     )
+    local_socket_results = local_socket_results or []
     return {
         "asset_count": len(assets),
         "open_port_count": sum(len(result["open_ports"]) for result in port_results),
@@ -28,6 +35,9 @@ def build_summary(assets: list[dict], port_results: list[dict], config_alerts: l
         "medium_risk_count": levels["medium"],
         "info_count": levels["info"],
         "critical_config_change_count": len(config_alerts),
+        "local_socket_open_count": sum(
+            result["status"] == "open" for result in local_socket_results
+        ),
     }
 
 
@@ -43,6 +53,7 @@ def save_text_summary(summary: dict, config_changes: list[str], alerts: list[str
         f"Yüksek riskli port bulgusu: {summary['high_risk_count']}",
         f"Orta riskli port bulgusu: {summary['medium_risk_count']}",
         f"Kritik config değişikliği: {summary['critical_config_change_count']}",
+        f"Loopback üzerinde doğrulanan açık TCP portu: {summary['local_socket_open_count']}",
         "",
         "YAPILANDIRMA DEĞİŞİKLİKLERİ",
         *config_changes,
@@ -61,10 +72,11 @@ def run_full_audit() -> dict:
 
     assets, inventory_report = discover_simulated_assets()
     port_results, port_report = assess_simulated_ports()
+    local_socket_results, local_socket_report = run_local_socket_demo()
     baseline = create_simulated_backup("baseline")
     changed = create_simulated_backup("changed")
     config_changes, alerts, diff_report = compare_configs(baseline, changed)
-    summary = build_summary(assets, port_results, alerts)
+    summary = build_summary(assets, port_results, alerts, local_socket_results)
 
     json_report = f"data/reports/audit_summary_{timestamp()}.json"
     save_json(
@@ -75,6 +87,7 @@ def run_full_audit() -> dict:
             "artifacts": {
                 "inventory": inventory_report,
                 "port_report": port_report,
+                "local_socket_report": local_socket_report,
                 "config_diff": diff_report,
             },
             "alerts": alerts,
