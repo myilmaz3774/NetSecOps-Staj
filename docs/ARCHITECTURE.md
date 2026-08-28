@@ -35,10 +35,11 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 - `discovery.py`: Örnek cihazları doğrular ve envanter kaydı üretir.
 - `port_scan.py`: İzlenen portları risk seviyelerine ayırır.
 - `local_socket_lab.py`: Geçici loopback servisiyle gerçek TCP bağlantı testini gösterir.
-- `config_backup.py`: Kontrollü iki config sürümünü zaman damgalı olarak yedekler.
+- `config_backup.py`: Config sürümlerini cihaz bazlı arşivler, SHA-256 metadata üretir ve son iki doğrulanmış yedeği seçer.
+- `config_tracking.py`: Yedekleme, bütünlük kontrolü ve diff analizini tek akışta birleştirir.
 - `diff_check.py`: Eklenen ve silinen satırları karşılaştırır; kritik değişiklikleri belirler.
 - `workflow.py`: Bütün modülleri tek bir denetim akışında birleştirir.
 - `validation.py`: Girdi şeması ve izinli ağ sınırı kontrollerini uygular.
 - `app_logging.py`: Uygulama günlüklerini boyut kontrollü şekilde saklar.
 
-Örnek switch yapılandırmaları `fixtures/configs` altında kaynak veri olarak tutulur. Üretilen zaman damgalı kopyalar Git'e eklenmeyen `data/backups` klasörüne yazılır.
+Örnek switch yapılandırmaları `fixtures/configs` altında kaynak veri olarak tutulur. Üretilen zaman damgalı kopyalar Git'e eklenmeyen `data/backups/<device_name>` klasörüne yazılır. Her `.txt` yedeğinin yanında dosya boyutu, oluşturulma zamanı ve SHA-256 özetini taşıyan `.metadata.json` kaydı bulunur. Diff işlemi yalnızca son iki yedek metadata ile eşleşirse çalışır.

@@ -7,6 +7,7 @@ Bu proje, staj kapsamında ağ varlık envanteri, port/risk denetimi ve yapılan
 - Simüle edilmiş IP, MAC ve cihaz envanteri
 - Tanımlı kritik portların risk değerlendirmesi
 - Zaman damgalı örnek yapılandırma yedekleri
+- Cihaz bazlı yedek geçmişi ve SHA-256 bütünlük doğrulaması
 - Satır bazlı yapılandırma fark analizi ve kritik değişiklik uyarısı
 - JSON tabanlı envanter ve rapor çıktıları
 - Yalnızca loopback üzerinde çalışan gerçek TCP Socket laboratuvarı
@@ -52,6 +53,14 @@ python -m unittest discover -s tests -v
 - `docs/`: Teknik mimari ve test senaryoları
 
 Her `main` dalı güncellemesinde GitHub Actions, otomatik testleri farklı Python sürümlerinde çalıştırır ve tam denetim için smoke test uygular.
+
+## Config değişiklik takip akışı
+
+1. `baseline` ve `changed` laboratuvar config dosyaları cihaz klasörüne zaman damgalı olarak yedeklenir.
+2. Her yedeğin dosya adı, boyutu ve SHA-256 özeti ayrı metadata kaydında tutulur.
+3. Cihazın son iki yedeği otomatik seçilir ve karşılaştırma öncesinde bütünlükleri doğrulanır.
+4. VLAN, ACL ve erişim kuralı değişiklikleri satır bazlı diff raporuna yazılır.
+5. Güvenli bir `deny` kuralının kaldırılması veya geniş bir `permit` kuralının eklenmesi kritik alarm üretir.
 
 ## Staj raporu için not
 

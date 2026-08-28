@@ -6,8 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 from modules.app_logging import configure_logging
-from modules.config_backup import create_simulated_backup
-from modules.diff_check import compare_configs
+from modules.config_tracking import run_simulated_config_tracking
 from modules.discovery import discover_simulated_assets
 from modules.local_socket_lab import run_local_socket_demo
 from modules.notifier import format_alerts
@@ -73,9 +72,10 @@ def run_full_audit() -> dict:
     assets, inventory_report = discover_simulated_assets()
     port_results, port_report = assess_simulated_ports()
     local_socket_results, local_socket_report = run_local_socket_demo()
-    baseline = create_simulated_backup("baseline")
-    changed = create_simulated_backup("changed")
-    config_changes, alerts, diff_report = compare_configs(baseline, changed)
+    config_tracking = run_simulated_config_tracking()
+    config_changes = config_tracking["changes"]
+    alerts = config_tracking["alerts"]
+    diff_report = config_tracking["report"]
     summary = build_summary(assets, port_results, alerts, local_socket_results)
 
     json_report = f"data/reports/audit_summary_{timestamp()}.json"
@@ -89,6 +89,9 @@ def run_full_audit() -> dict:
                 "port_report": port_report,
                 "local_socket_report": local_socket_report,
                 "config_diff": diff_report,
+                "previous_config_backup": config_tracking["previous_backup"].name,
+                "current_config_backup": config_tracking["current_backup"].name,
+                "config_backup_integrity_verified": config_tracking["integrity_verified"],
             },
             "alerts": alerts,
         },

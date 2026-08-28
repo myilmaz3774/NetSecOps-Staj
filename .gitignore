@@ -1,6 +1,8 @@
 __pycache__/
 *.py[cod]
 .venv/
+.idea/
+.pytest_cache/
 .env
 .env.*
 config/devices.json
@@ -9,7 +11,7 @@ config/devices.json
 id_rsa
 id_ed25519
 data/inventory/*.json
-data/backups/**/*.txt
+data/backups/**
 data/reports/*.json
 data/reports/*.txt
 logs/*.log

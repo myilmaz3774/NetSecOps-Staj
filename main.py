@@ -6,8 +6,7 @@ import sys
 from collections.abc import Callable
 
 from modules.app_logging import configure_logging
-from modules.config_backup import create_simulated_backup
-from modules.diff_check import compare_configs
+from modules.config_tracking import run_simulated_config_tracking
 from modules.discovery import discover_simulated_assets
 from modules.local_socket_lab import run_local_socket_demo
 from modules.port_scan import assess_simulated_ports
@@ -53,17 +52,18 @@ def print_port_report() -> None:
 
 
 def create_and_compare_backups() -> None:
-    baseline = create_simulated_backup("baseline")
-    changed = create_simulated_backup("changed")
-    changes, alerts, report = compare_configs(baseline, changed)
+    result = run_simulated_config_tracking()
     print("\nYapılandırma farkları:")
-    for line in changes:
+    print(f"Önceki yedek: {result['previous_backup'].name}")
+    print(f"Güncel yedek: {result['current_backup'].name}")
+    print("Bütünlük kontrolü: başarılı")
+    for line in result["changes"]:
         print(line)
-    if alerts:
+    if result["alerts"]:
         print("\nKRİTİK UYARILAR:")
-        for alert in alerts:
+        for alert in result["alerts"]:
             print(f"- {alert}")
-    print(f"Diff raporu kaydedildi: {report}")
+    print(f"Diff raporu kaydedildi: {result['report']}")
 
 
 def print_full_audit() -> None:

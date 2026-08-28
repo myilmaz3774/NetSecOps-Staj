@@ -14,6 +14,11 @@
 | Birleşik denetim özeti | Cihaz, port, risk ve alarm sayıları doğru hesaplanır |
 | Geçici loopback TCP servisi | Açık port olarak algılanır |
 | Loopback dışı TCP hedefi | Güvenlik sınırı nedeniyle reddedilir |
+| Config yedeği oluşturma | Config ve SHA-256 metadata dosyaları birlikte oluşur |
+| Yedek içeriğinin sonradan değiştirilmesi | Bütünlük doğrulaması başarısız olur |
+| Güvensiz cihaz klasör adı | Dizin geçişi girişimi reddedilir |
+| İkiden az config yedeği | Karşılaştırma açıklayıcı hatayla durur |
+| Birden fazla config yedeği | Zaman sırasına göre son iki doğrulanmış yedek seçilir |
 
 Test komutu:
 
@@ -31,3 +36,5 @@ python -m unittest discover -s tests -v
 6. `data/reports` altında JSON ve metin özetlerinin oluştuğu kontrol edilir.
 7. `logs/app.log` içinde denetimin başlangıç ve bitiş kayıtları doğrulanır.
 8. Loopback Socket laboratuvarında bir açık ve bir kapalı port görüldüğü doğrulanır.
+9. Config işlemi çıktısında önceki/güncel yedek adları ile başarılı bütünlük kontrolü görülür.
+10. Yedeklerin yanında oluşan metadata kayıtlarında SHA-256 değerleri kontrol edilir.

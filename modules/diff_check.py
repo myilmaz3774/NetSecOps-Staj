@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import difflib
+import hashlib
 from pathlib import Path
 
 from modules.storage import save_json, timestamp
@@ -40,6 +41,13 @@ def compare_configs(old_path: Path, new_path: Path) -> tuple[list[str], list[str
     output_path = f"data/reports/config_diff_{timestamp()}.json"
     save_json(
         output_path,
-        {"old_backup": old_path.name, "new_backup": new_path.name, "changes": changes, "alerts": alerts},
+        {
+            "old_backup": old_path.name,
+            "new_backup": new_path.name,
+            "old_sha256": hashlib.sha256(old_path.read_bytes()).hexdigest(),
+            "new_sha256": hashlib.sha256(new_path.read_bytes()).hexdigest(),
+            "changes": changes,
+            "alerts": alerts,
+        },
     )
     return changes, alerts, output_path
