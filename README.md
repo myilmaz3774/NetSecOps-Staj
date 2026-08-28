@@ -16,11 +16,27 @@ Uygulama yalnızca `config/simulated_network.json` içindeki örnek laboratuvar 
 
 ## Çalıştırma
 
+Python 3.10 veya daha yeni bir sürüm gereklidir. Harici Python paketi gerekmez.
+
 ```powershell
 python main.py
 ```
 
 Menüden sırasıyla varlık keşfi, port/risk denetimi veya config yedekleme ve diff işlemi seçilebilir.
+
+Tüm denetimleri tek komutla çalıştırmak için:
+
+```powershell
+python main.py --run all
+```
+
+Diğer otomasyon seçenekleri `discovery`, `ports` ve `config` değerleridir.
+
+## Testler
+
+```powershell
+python -m unittest discover -s tests -v
+```
 
 ## Dosya açıklamaları
 
@@ -29,7 +45,9 @@ Menüden sırasıyla varlık keşfi, port/risk denetimi veya config yedekleme ve
 - `data/inventory/`: Oluşturulan envanter kayıtları
 - `data/backups/`: Örnek yapılandırma yedekleri
 - `data/reports/`: Port ve fark analizi raporları
-- `logs/`: İleride eklenecek uygulama günlükleri
+- `logs/`: Boyut kontrollü uygulama günlükleri
+- `tests/`: Otomatik birim ve güvenlik sınırı testleri
+- `docs/`: Teknik mimari ve test senaryoları
 
 ## Staj raporu için not
 

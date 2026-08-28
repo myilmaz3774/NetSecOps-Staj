@@ -1,8 +1,15 @@
 __pycache__/
 *.py[cod]
 .venv/
+.env
+.env.*
+config/devices.json
+*.pem
+*.key
+id_rsa
+id_ed25519
 data/inventory/*.json
-data/backups/*/*.txt
+data/backups/**/*.txt
 data/reports/*.json
 data/reports/*.txt
 logs/*.log

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from modules.storage import load_json, save_json, timestamp
+from modules.validation import validate_assets, validate_settings
 
 
 RISK_DETAILS = {
@@ -14,7 +15,9 @@ RISK_DETAILS = {
 }
 
 
-def assess_assets(assets: list[dict], monitored_ports: set[int]) -> list[dict]:
+def assess_assets(
+    assets: list[dict], monitored_ports: set[int], high_risk_ports: set[int]
+) -> list[dict]:
     """Verilen cihaz listesindeki açık portları risk seviyelerine ayırır."""
     results = []
 
@@ -25,6 +28,8 @@ def assess_assets(assets: list[dict], monitored_ports: set[int]) -> list[dict]:
             level, description = RISK_DETAILS.get(
                 port, ("info", "Bilgilendirici - Açık port")
             )
+            if port in high_risk_ports:
+                level = "high"
             findings.append({"port": port, "level": level, "risk": description})
         results.append(
             {
@@ -42,8 +47,11 @@ def assess_simulated_ports() -> tuple[list[dict], str]:
     """Örnek envanterdeki tanımlı kritik portları değerlendirir."""
     settings = load_json("config/settings.json")
     assets = load_json("config/simulated_network.json")
+    allowed_network = validate_settings(settings)
+    validate_assets(assets, allowed_network)
     monitored_ports = set(settings["ports"])
-    results = assess_assets(assets, monitored_ports)
+    high_risk_ports = set(settings["high_risk_ports"])
+    results = assess_assets(assets, monitored_ports, high_risk_ports)
 
     output_path = f"data/reports/port_report_{timestamp()}.json"
     save_json(output_path, {"mode": "simulation", "results": results})
