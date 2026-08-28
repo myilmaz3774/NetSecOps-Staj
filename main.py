@@ -1,9 +1,13 @@
 """NetSecOps laboratuvar otomasyonunun komut satırı arayüzü."""
 
+import argparse
+
+from modules.app_logging import configure_logging
 from modules.config_backup import create_simulated_backup
 from modules.diff_check import compare_configs
 from modules.discovery import discover_simulated_assets
 from modules.port_scan import assess_simulated_ports
+from modules.workflow import run_full_audit
 
 
 def print_assets() -> None:
@@ -38,12 +42,26 @@ def create_and_compare_backups() -> None:
     print(f"Diff raporu kaydedildi: {report}")
 
 
+def print_full_audit() -> None:
+    result = run_full_audit()
+    summary = result["summary"]
+    print("\nTam laboratuvar denetimi tamamlandı:")
+    print(f"- Cihaz sayısı: {summary['asset_count']}")
+    print(f"- Açık port sayısı: {summary['open_port_count']}")
+    print(f"- Yüksek riskli port bulgusu: {summary['high_risk_count']}")
+    print(f"- Kritik config değişikliği: {summary['critical_config_change_count']}")
+    print(f"- JSON raporu: {result['json_report']}")
+    print(f"- Metin raporu: {result['text_report']}")
+
+
 def main() -> None:
+    configure_logging()
     while True:
         print("\nNetSecOps Laboratory")
         print("1 - Simüle edilmiş varlık keşfi")
         print("2 - Simüle edilmiş port ve risk denetimi")
         print("3 - Simüle edilmiş config yedekleme ve diff")
+        print("4 - Tam laboratuvar denetimi")
         print("0 - Çıkış")
         choice = input("Seçiminiz: ").strip()
         if choice == "1":
@@ -52,6 +70,8 @@ def main() -> None:
             print_port_report()
         elif choice == "3":
             create_and_compare_backups()
+        elif choice == "4":
+            print_full_audit()
         elif choice == "0":
             print("Uygulama kapatıldı.")
             break
@@ -59,5 +79,24 @@ def main() -> None:
             print("Geçersiz seçim yaptınız.")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="NetSecOps simülasyon laboratuvarı")
+    parser.add_argument(
+        "--run",
+        choices=("menu", "discovery", "ports", "config", "all"),
+        default="menu",
+        help="Çalıştırılacak laboratuvar işlemi",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    actions = {
+        "menu": main,
+        "discovery": print_assets,
+        "ports": print_port_report,
+        "config": create_and_compare_backups,
+        "all": print_full_audit,
+    }
+    actions[args.run]()

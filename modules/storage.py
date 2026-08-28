@@ -19,7 +19,7 @@ def load_json(relative_path: str) -> Any:
 
 def timestamp() -> str:
     """Dosya isimlerinde kullanılacak zaman damgasını üretir."""
-    return datetime.now().strftime("%Y%m%d_%H%M%S")
+    return datetime.now().strftime("%Y%m%d_%H%M%S_%f")
 
 
 def ensure_directory(relative_path: str) -> Path:
