@@ -35,6 +35,17 @@ def validate_settings(settings: Any) -> ipaddress.IPv4Network | ipaddress.IPv6Ne
     high_risk_ports = _validate_ports(settings.get("high_risk_ports"), "high_risk_ports")
     if not set(high_risk_ports).issubset(monitored_ports):
         raise ValueError("high_risk_ports, izlenen ports listesinin alt kümesi olmalıdır.")
+    notifications = settings.get("notifications", {})
+    if not isinstance(notifications, dict):
+        raise ValueError("notifications bir JSON nesnesi olmalıdır.")
+    if not isinstance(notifications.get("enabled", False), bool):
+        raise ValueError("notifications.enabled boolean olmalıdır.")
+    env_name = notifications.get("webhook_url_env", "NETSECOPS_WEBHOOK_URL")
+    if not isinstance(env_name, str) or not env_name.strip():
+        raise ValueError("notifications.webhook_url_env boş olamaz.")
+    timeout = notifications.get("timeout_seconds", 3)
+    if not isinstance(timeout, (int, float)) or isinstance(timeout, bool) or not 1 <= timeout <= 30:
+        raise ValueError("notifications.timeout_seconds 1-30 arasında olmalıdır.")
     return network
 
 

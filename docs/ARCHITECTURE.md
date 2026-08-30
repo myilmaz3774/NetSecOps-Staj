@@ -28,7 +28,8 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 - IP, MAC, hostname ve port alanları çalıştırma öncesinde kontrol edilir.
 - Gerçek cihaz bilgileri için ayrılan `config/devices.json` Git tarafından dışlanır.
 - Parola, ortam değişkeni, PEM ve özel anahtar dosyaları Git dışında tutulur.
-- Bildirimler ağ üzerinden gönderilmez; yerel rapor ve log olarak üretilir.
+- Bildirimler varsayılan olarak kapalıdır; etkinleştirilirse URL yalnızca ortam değişkeninden okunur.
+- Webhook hedefi HTTPS veya loopback HTTP ile sınırlandırılır; erişim bilgileri kaynak koda yazılmaz.
 
 ## Modüller
 
@@ -41,5 +42,6 @@ Tam denetim iş akışı --> JSON + metin özeti + uygulama günlüğü
 - `workflow.py`: Bütün modülleri tek bir denetim akışında birleştirir.
 - `validation.py`: Girdi şeması ve izinli ağ sınırı kontrollerini uygular.
 - `app_logging.py`: Uygulama günlüklerini boyut kontrollü şekilde saklar.
+- `notifier.py`: Konsol/rapor uyarısını üretir ve isteğe bağlı, güvenli webhook bildirimini yönetir.
 
 Örnek switch yapılandırmaları `fixtures/configs` altında kaynak veri olarak tutulur. Üretilen zaman damgalı kopyalar Git'e eklenmeyen `data/backups/<device_name>` klasörüne yazılır. Her `.txt` yedeğinin yanında dosya boyutu, oluşturulma zamanı ve SHA-256 özetini taşıyan `.metadata.json` kaydı bulunur. Diff işlemi yalnızca son iki yedek metadata ile eşleşirse çalışır.

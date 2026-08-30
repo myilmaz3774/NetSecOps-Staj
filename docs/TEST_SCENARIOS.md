@@ -19,6 +19,9 @@
 | Güvensiz cihaz klasör adı | Dizin geçişi girişimi reddedilir |
 | İkiden az config yedeği | Karşılaştırma açıklayıcı hatayla durur |
 | Birden fazla config yedeği | Zaman sırasına göre son iki doğrulanmış yedek seçilir |
+| Webhook kapalı | Ağ çağrısı yapılmadan yerel bildirim üretilir |
+| Webhook HTTPS ve ortam değişkeni tanımlı | JSON bildirimi gönderim sonucu raporlanır |
+| Loopback dışı HTTP webhook | Güvenlik sınırı nedeniyle reddedilir |
 
 Test komutu:
 
@@ -38,3 +41,4 @@ python -m unittest discover -s tests -v
 8. Loopback Socket laboratuvarında bir açık ve bir kapalı port görüldüğü doğrulanır.
 9. Config işlemi çıktısında önceki/güncel yedek adları ile başarılı bütünlük kontrolü görülür.
 10. Yedeklerin yanında oluşan metadata kayıtlarında SHA-256 değerleri kontrol edilir.
+11. Varsayılan webhook ayarının `disabled` durumunda kaldığı doğrulanır.

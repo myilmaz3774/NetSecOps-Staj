@@ -11,6 +11,7 @@ Bu proje, staj kapsamında ağ varlık envanteri, port/risk denetimi ve yapılan
 - Satır bazlı yapılandırma fark analizi ve kritik değişiklik uyarısı
 - JSON tabanlı envanter ve rapor çıktıları
 - Yalnızca loopback üzerinde çalışan gerçek TCP Socket laboratuvarı
+- Varsayılan kapalı, ortam değişkeni tabanlı webhook bildirim katmanı
 
 ## Güvenlik sınırı
 
@@ -33,6 +34,8 @@ python main.py --run all
 ```
 
 Diğer otomasyon seçenekleri `discovery`, `ports`, `config` ve `local` değerleridir.
+
+Webhook bildirimleri varsayılan olarak kapalıdır. Yetkili bir test ortamında etkinleştirmek için `config/settings.json` içindeki `notifications.enabled` değerini `true` yapıp URL'yi `NETSECOPS_WEBHOOK_URL` ortam değişkeninde tanımlamak gerekir. HTTPS zorunludur; yalnızca loopback HTTP istisnadır.
 
 ## Testler
 

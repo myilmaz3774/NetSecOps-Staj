@@ -28,4 +28,9 @@
 
 ### 4. Aşama - Entegrasyon ve bildirim geliştirmeleri
 
-Bu aşama henüz başlatılmamıştır.
+- Tam denetim akışı ve CLI menüsü modülleri birleştirir.
+- Webhook bildirimi varsayılan kapalı ve ortam değişkeni tabanlıdır.
+- HTTPS veya loopback HTTP hedef kontrolü uygulanır.
+- Bildirim sonucu JSON/metin raporlarına eklenir.
+
+Bu aşama tamamlandı. Sonraki çalışma, nihai dokümantasyon ve sunum çıktılarıdır.

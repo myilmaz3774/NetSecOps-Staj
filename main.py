@@ -9,7 +9,9 @@ from modules.app_logging import configure_logging
 from modules.config_tracking import run_simulated_config_tracking
 from modules.discovery import discover_simulated_assets
 from modules.local_socket_lab import run_local_socket_demo
+from modules.notifier import notify_alerts
 from modules.port_scan import assess_simulated_ports
+from modules.storage import load_json
 from modules.workflow import run_full_audit
 
 
@@ -63,6 +65,8 @@ def create_and_compare_backups() -> None:
         print("\nKRİTİK UYARILAR:")
         for alert in result["alerts"]:
             print(f"- {alert}")
+    notification = notify_alerts(result["alerts"], load_json("config/settings.json"))
+    print(f"Webhook durumu: {notification['status']}")
     print(f"Diff raporu kaydedildi: {result['report']}")
 
 
@@ -75,6 +79,7 @@ def print_full_audit() -> None:
     print(f"- Yüksek riskli port bulgusu: {summary['high_risk_count']}")
     print(f"- Kritik config değişikliği: {summary['critical_config_change_count']}")
     print(f"- Loopback açık TCP portu: {summary['local_socket_open_count']}")
+    print(f"- Bildirim durumu: {result['notification']['status']}")
     print(f"- JSON raporu: {result['json_report']}")
     print(f"- Metin raporu: {result['text_report']}")
 
