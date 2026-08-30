@@ -24,8 +24,6 @@
 - VLAN ve ACL değişikliklerinin satır bazlı karşılaştırılması
 - Kritik kural ekleme/silme uyarıları
 
-## Sonraki aşama
-
 ### 4. Aşama - Entegrasyon ve bildirim geliştirmeleri
 
 - Tam denetim akışı ve CLI menüsü modülleri birleştirir.
@@ -34,3 +32,17 @@
 - Bildirim sonucu JSON/metin raporlarına eklenir.
 
 Bu aşama tamamlandı. Sonraki çalışma, nihai dokümantasyon ve sunum çıktılarıdır.
+
+### 5. Aşama - Test ve nihai dokümantasyon
+
+- 22 otomatik test ve tam denetim smoke testi doğrulandı.
+- Windows UTF-8 konsol uyumluluğu kontrol edildi.
+- Nihai proje raporu ve demo kılavuzu hazırlandı.
+
+### 6. Aşama - Teknik sunum
+
+- 7 slaytlık teknik sunum oluşturuldu.
+- Problem, mimari, yetenekler, örnek çıktılar, kalite kanıtı ve güvenlik sınırları anlatıldı.
+- Sunum tüm slaytlar render edilerek görsel olarak kontrol edildi.
+
+Tüm proje aşamaları tamamlandı.

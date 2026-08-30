@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 .idea/
 .pytest_cache/
+*.inspect.ndjson
 .env
 .env.*
 config/devices.json

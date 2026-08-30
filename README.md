@@ -57,6 +57,12 @@ python -m unittest discover -s tests -v
 
 Her `main` dalı güncellemesinde GitHub Actions, otomatik testleri farklı Python sürümlerinde çalıştırır ve tam denetim için smoke test uygular.
 
+## Nihai teslim dosyaları
+
+- [Nihai proje raporu](docs/FINAL_REPORT.md)
+- [Demo kılavuzu](docs/DEMO_GUIDE.md)
+- [Teknik sunum](docs/NetSecOps_Teknik_Sunum.pptx)
+
 ## Config değişiklik takip akışı
 
 1. `baseline` ve `changed` laboratuvar config dosyaları cihaz klasörüne zaman damgalı olarak yedeklenir.
